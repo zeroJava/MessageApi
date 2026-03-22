@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyTitle></AssemblyTitle>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>MessageApi.Application</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MessageApi.Domain\MessageApi.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

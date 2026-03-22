@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="MessageApi.Application/MessageApi.Application.csproj" Id="9d8756c7-e2fc-497b-b322-ed96c5d9520d" />
+  <Project Path="MessageApi.Domain/MessageApi.Domain.csproj" Id="aa2ef868-c8c3-4d30-92ec-1b56a10f1f1e" />
+  <Project Path="MessageApi.Infrastructure/SqliteEF/MessageApi.Infrastructure.Sqlite.csproj" />
+  <Project Path="MessageApi/MessageApi.csproj" />
+</Solution>
