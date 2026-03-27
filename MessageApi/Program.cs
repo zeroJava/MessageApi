@@ -10,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 GlobalAppConfig.InitialiseUserBuilder(builder);
+GlobalAppConfig.InitialiseMessageBuilder(builder);
 
 var app = builder.Build();
 

@@ -13,26 +13,21 @@ public class RepoTransaction : IRepoTransaction
 
    public void BeginTransaction()
    {
-      throw new NotImplementedException();
    }
 
    public void Callback()
    {
-      throw new NotImplementedException();
    }
 
    public void Callback(string transactionName)
    {
-      throw new NotImplementedException();
    }
 
    public void Commit()
    {
-      throw new NotImplementedException();
    }
 
    public void Dispose()
    {
-      throw new NotImplementedException();
    }
 }
