@@ -1,7 +1,7 @@
 ﻿using MessageApi.Domain;
 using System.Data;
 
-namespace MessageApi.Infastructure.Sqlite;
+namespace MessageApi.Infrastructure.Sqlite;
 
 public class RepoTransaction : IRepoTransaction
 {

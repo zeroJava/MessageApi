@@ -1,6 +1,6 @@
 ﻿using MessageApi.Domain;
 
-namespace MessageApi.Infastructure.Sqlite;
+namespace MessageApi.Infrastructure.Sqlite;
 
 public class MessageRepository : IMessageRepository
 {

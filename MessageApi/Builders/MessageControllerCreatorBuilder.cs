@@ -1,6 +1,6 @@
 ﻿using MessageApi.Application;
 using MessageApi.Domain;
-using MessageApi.Infastructure.Sqlite;
+using MessageApi.Infrastructure.Sqlite;
 
 namespace MessageApi;
 

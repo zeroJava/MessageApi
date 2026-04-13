@@ -1,7 +1,7 @@
 ﻿using MessageApi.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace MessageApi.Infastructure.Sqlite;
+namespace MessageApi.Infrastructure.Sqlite;
 
 internal class MessageDbContext : DbContext
 {
