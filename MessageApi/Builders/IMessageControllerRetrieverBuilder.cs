@@ -10,7 +10,6 @@ public interface IMessageControllerRetrieverBuilder
    IMessageControllerRetrieverBuilder AddMessageDispatchRepository(IMessageDispatchRepository repository);
    IMessageControllerRetrieverBuilder AddMessageRetriever(IMessageRetriever retriever);
    IMessageControllerRetrieverBuilder AddNewMessageRetrieverUseCase(IMessageRetrieverUseCase retrieverUseCase);
-   IMessageControllerRetrieverBuilder AddTokenValidator(ITokenValidator tokenValidator);
    MessageControllerRetrieverOption Build();
 }
 
@@ -21,5 +20,4 @@ public sealed class MessageControllerRetrieverOption
    public required IMessageDispatchRepository MessageDispatchRepository { get; set; }
    public required IMessageRetriever MessageRetriever { get; set; }
    public required IMessageRetrieverUseCase RetrieveMessageService { get; set; }
-   public required ITokenValidator TokenValidator { get; set; }
 }

@@ -11,7 +11,6 @@ public interface IMessageControllerCreatorBuilder
    IMessageControllerCreatorBuilder AddRepoTransaction(IRepoTransaction repoTransaction);
    IMessageControllerCreatorBuilder AddMessageCreator(IMessageCreator creator);
    IMessageControllerCreatorBuilder AddNewMessageCreatorUseCase(IMessageCreatorUseCase creatorUseCase);
-   IMessageControllerCreatorBuilder AddTokenValidator(ITokenValidator tokenValidator);
    MessageControllerCreatorOption Build();
 }
 
@@ -23,5 +22,4 @@ public sealed class MessageControllerCreatorOption
    public required IRepoTransaction RepoTransaction { get; set; }
    public required IMessageCreator MessageCreator { get; set; }
    public required IMessageCreatorUseCase NewMessageService { get; set; }
-   public required ITokenValidator TokenValidator { get; set; }
 }

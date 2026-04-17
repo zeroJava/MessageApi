@@ -54,15 +54,13 @@ public class MessageControllerRetrieverBuilder : IMessageControllerRetrieverBuil
       IMessageRepository messageRepo = messageRepository ?? MessageRepoFactory.GetRepository("sqlite");
       IMessageDispatchRepository dispatchRepo = messageDispatchRepository ?? MessageDispatcherRepoFactory.GetRepository("sqlite");
       IMessageRetriever retriever = messageRetriever ?? new MessageRetriever(userRepo, messageRepo, dispatchRepo);
-      ITokenValidator tokenValidator = this.tokenValidator ?? new TokenValidator(userRepo);
-      IMessageRetrieverUseCase messageRetrieveService = messageRetrieverUseCase ?? new RetrieveMessageService(retriever, tokenValidator);
+      IMessageRetrieverUseCase messageRetrieveService = messageRetrieverUseCase ?? new RetrieveMessageService(retriever);
       return new MessageControllerRetrieverOption()
       {
          MessageRetriever = retriever,
          MessageDispatchRepository = dispatchRepo,
          MessageRepository = messageRepo,
          RetrieveMessageService = messageRetrieveService,
-         TokenValidator = tokenValidator,
          UserRepository = userRepo,
       };
    }

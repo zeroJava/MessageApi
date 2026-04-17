@@ -11,7 +11,7 @@ public static class GlobalAppConfig
       {
          IUserRepository userRepository = UserRepoFactory.GetRepository("sqlite");
          UserControllerRetrieverBuilder controllerBuilder = new();
-         controllerBuilder.AddUserRepository(userRepository).AddInputValidator(new InputValidator()).AddTokenValidator(new TokenValidator(userRepository));
+         controllerBuilder.AddUserRepository(userRepository).AddInputValidator(new InputValidator());
          return controllerBuilder;
       });
 
@@ -31,7 +31,7 @@ public static class GlobalAppConfig
          IUserRepository userRepository = UserRepoFactory.GetRepository("sqlite");
          IMessageRepository messageRepository = MessageRepoFactory.GetRepository("sqlite");
          MessageControllerRetrieverBuilder controllerBuilder = new();
-         controllerBuilder.AddMessageRepository(messageRepository).AddUserRepository(userRepository).AddTokenValidator(new TokenValidator(userRepository));
+         controllerBuilder.AddMessageRepository(messageRepository).AddUserRepository(userRepository);
          return controllerBuilder;
       });
 

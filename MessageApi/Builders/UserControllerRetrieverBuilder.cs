@@ -23,12 +23,6 @@ public class UserControllerRetrieverBuilder : IUserControllerRerieverBuilder
       return this;
    }
 
-   public IUserControllerRerieverBuilder AddTokenValidator(ITokenValidator tokenValidator)
-   {
-      this.tokenValidator = tokenValidator;
-      return this;
-   }
-
    public IUserControllerRerieverBuilder AddInputValidator(IInputValidator<string> inputValidator)
    {
       this.inputValidator = inputValidator;
@@ -45,14 +39,12 @@ public class UserControllerRetrieverBuilder : IUserControllerRerieverBuilder
    {
       IUserRepository repository = userRepository ?? UserRepoFactory.GetRepository("sqlite");
       IUserRetriever retriever = userRetriever ?? new UserRetriever(repository);
-      ITokenValidator toknValidtr = tokenValidator ?? new TokenValidator(repository);
       IInputValidator<string>? inptValidtr = inputValidator ?? new InputValidator();
-      IRetrieveUserUseCase retrieveUserL = retrieveUser ?? new RetrieveUserService(retriever, toknValidtr, inptValidtr);
+      IRetrieveUserUseCase retrieveUserL = retrieveUser ?? new RetrieveUserService(retriever, inptValidtr);
       return new UserControllerRetrieverOption
       {
          UserRepository = repository,
          UserRetriever = retriever,
-         TokenValidator = toknValidtr,
          InputValidator = inptValidtr,
          RetrieveUser = retrieveUserL,
       };

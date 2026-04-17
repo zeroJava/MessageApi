@@ -52,6 +52,7 @@ public class UserController : ControllerBase
    }
 
    [HttpGet]
+   [Authorize]
    [Route("GetUserTest")]
    public async Task<ActionResult<string>> GetUserTest()
    {

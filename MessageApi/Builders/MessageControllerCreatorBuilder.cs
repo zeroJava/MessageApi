@@ -44,12 +44,6 @@ public class MessageControllerCreatorBuilder : IMessageControllerCreatorBuilder
       return this;
    }
 
-   public IMessageControllerCreatorBuilder AddTokenValidator(ITokenValidator tokenValidator)
-   {
-      this.tokenValidator = tokenValidator;
-      return this;
-   }
-
    public IMessageControllerCreatorBuilder AddUserRepository(IUserRepository repository)
    {
       userRepository = repository;
@@ -63,8 +57,7 @@ public class MessageControllerCreatorBuilder : IMessageControllerCreatorBuilder
       IMessageDispatchRepository dispatchRepo = messageDispatchRepository ?? MessageDispatcherRepoFactory.GetRepository("sqlite");
       IRepoTransaction repoTransaction = this.repoTransaction ?? new RepoTransaction();
       IMessageCreator creator = messageCreator ?? new MessageCreator(userRepo, messageRepo, dispatchRepo, repoTransaction);
-      ITokenValidator tokenValidator = this.tokenValidator ?? new TokenValidator(userRepo);
-      IMessageCreatorUseCase messageCreatorService = messageCreatorUseCase ?? new NewMessageService(creator, tokenValidator);
+      IMessageCreatorUseCase messageCreatorService = messageCreatorUseCase ?? new NewMessageService(creator);
       return new MessageControllerCreatorOption()
       {
          MessageCreator = creator,
@@ -72,7 +65,6 @@ public class MessageControllerCreatorBuilder : IMessageControllerCreatorBuilder
          MessageRepository = messageRepo,
          NewMessageService = messageCreatorService,
          RepoTransaction = repoTransaction,
-         TokenValidator = tokenValidator,
          UserRepository = userRepo,
       };
    }
