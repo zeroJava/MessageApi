@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MessageApi.Application\MessageApi.Application.csproj" />
+    <ProjectReference Include="..\MessageApi.Infrastructure.Standard\MessageApi.Infrastructure.Standard.csproj" />
     <ProjectReference Include="..\MessageApi.Infrastructure\SqliteEF\MessageApi.Infrastructure.Sqlite.csproj" />
   </ItemGroup>
 

@@ -1,5 +1,7 @@
-﻿using MessageApi.Application;
-using MessageApi.Domain;
+﻿using MessageApi.Domain;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace MessageApi;
 
@@ -43,5 +45,32 @@ public static class GlobalAppConfig
          controllerBuilder.AddMessageRepository(messageRepository).AddUserRepository(userRepository);
          return controllerBuilder;
       });
+   }
+
+   public static void InitialiseTokenGenerator(WebApplicationBuilder builder)
+   {
+      // Replace with proper security
+      const string jwtKey = "helloworld123445789qwertyuiop123456789asdfghjkl123456789zxcvbnm123456789qazwsxedcrfvtgbyhnujmikolp123456789";
+      const string issuer = "Message.Api";
+      const string audience = "Testusers";
+      builder.Services.AddAuthentication(options =>
+      {
+         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+      })
+      .AddJwtBearer(options =>
+      {
+         options.TokenValidationParameters = new TokenValidationParameters
+         {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = issuer,
+            ValidAudience = audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+         };
+      });
+      builder.Services.AddAuthorization();
    }
 }

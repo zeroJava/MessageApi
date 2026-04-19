@@ -12,7 +12,6 @@ public class MessageControllerCreatorBuilder : IMessageControllerCreatorBuilder
    IRepoTransaction? repoTransaction;
    IMessageCreator? messageCreator;
    IMessageCreatorUseCase? messageCreatorUseCase;
-   ITokenValidator? tokenValidator;
 
    public IMessageControllerCreatorBuilder AddMessageCreator(IMessageCreator creator)
    {

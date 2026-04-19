@@ -1,5 +1,6 @@
 ﻿using MessageApi.Application;
 using MessageApi.ControllersBL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -18,6 +19,7 @@ public class MessageController : ControllerBase
       this.messageControllerRetrieverBuilder = messageControllerRetrieverBuilder;
    }
 
+   [Authorize]
    [HttpPost]
    [Route("NewMessage")]
    public async Task<ActionResult<MessageRequestState>> NewMessage(MessageRequest request)
@@ -34,6 +36,7 @@ public class MessageController : ControllerBase
       }
    }
 
+   [Authorize]
    [HttpPost]
    [Route("Conversation")]
    public async Task<ActionResult<List<MessageInfo>>> GetConversation(RetrieveMessageRequest request)
@@ -50,6 +53,7 @@ public class MessageController : ControllerBase
       }
    }
 
+   [Authorize]
    [HttpPost]
    [Route("MessagesSentToUser")]
    public async Task<ActionResult<List<MessageInfo>>> GetMessagesSentToUser(RetrieveMessageRequest request)

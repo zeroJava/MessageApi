@@ -1,6 +1,4 @@
-﻿using MessageApi.Domain;
-
-namespace MessageApi.Application;
+﻿namespace MessageApi.Application;
 
 public interface ITokenValidator
 {

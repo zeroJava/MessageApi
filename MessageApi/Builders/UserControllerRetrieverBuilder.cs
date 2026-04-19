@@ -7,7 +7,6 @@ public class UserControllerRetrieverBuilder : IUserControllerRerieverBuilder
 {
    IUserRepository? userRepository;
    IUserRetriever? userRetriever;
-   ITokenValidator? tokenValidator;
    IInputValidator<string>? inputValidator;
    IRetrieveUserUseCase? retrieveUser;
 

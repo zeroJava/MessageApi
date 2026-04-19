@@ -11,6 +11,7 @@ builder.Services.AddOpenApi();
 
 GlobalAppConfig.InitialiseUserBuilder(builder);
 GlobalAppConfig.InitialiseMessageBuilder(builder);
+GlobalAppConfig.InitialiseTokenGenerator(builder);
 
 var app = builder.Build();
 
@@ -23,6 +24,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
