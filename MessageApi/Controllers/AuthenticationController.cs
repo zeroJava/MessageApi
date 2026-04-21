@@ -9,6 +9,13 @@ namespace MessageApi.Controllers;
 [ApiController]
 public class AuthenticationController : ControllerBase
 {
+   readonly IAuthenticationControllerBuilder authenticationControllerBuilder;
+
+   public AuthenticationController(AuthenticationControllerBuilder authenticationControllerBuilder)
+   {
+      this.authenticationControllerBuilder = authenticationControllerBuilder;
+   }
+
    [HttpPost]
    [Route("AuthenticateUser")]
    public async Task<ActionResult<UserDto>> AuthenticateUser(AuthenticationRequest request)
@@ -16,7 +23,7 @@ public class AuthenticationController : ControllerBase
       try
       {
          SimpleJwtTokenGenerator tokenGenerator = new();
-         AuthToken authToken = await AuthenticationControllerLogic.AuthenticateUser(request, tokenGenerator).ConfigureAwait(false);
+         AuthToken authToken = await AuthenticationControllerLogic.AuthenticateUser(request, authenticationControllerBuilder).ConfigureAwait(false);
          return Ok(authToken);
       }
       catch (Exception ex)

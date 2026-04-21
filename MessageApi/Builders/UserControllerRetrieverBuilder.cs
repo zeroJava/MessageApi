@@ -5,10 +5,17 @@ namespace MessageApi;
 
 public class UserControllerRetrieverBuilder : IUserControllerRerieverBuilder
 {
+   readonly string defaultDbOption;
+
    IUserRepository? userRepository;
    IUserRetriever? userRetriever;
    IInputValidator<string>? inputValidator;
    IRetrieveUserUseCase? retrieveUser;
+
+   public UserControllerRetrieverBuilder(string defaultDbOption)
+   {
+      this.defaultDbOption = defaultDbOption;
+   }
 
    public IUserControllerRerieverBuilder AddUserRepository(IUserRepository userRepository)
    {
@@ -36,7 +43,7 @@ public class UserControllerRetrieverBuilder : IUserControllerRerieverBuilder
 
    public UserControllerRetrieverOption Build()
    {
-      IUserRepository repository = userRepository ?? UserRepoFactory.GetRepository("sqlite");
+      IUserRepository repository = userRepository ?? UserRepoFactory.GetRepository(defaultDbOption);
       IUserRetriever retriever = userRetriever ?? new UserRetriever(repository);
       IInputValidator<string>? inptValidtr = inputValidator ?? new InputValidator();
       IRetrieveUserUseCase retrieveUserL = retrieveUser ?? new RetrieveUserService(retriever, inptValidtr);

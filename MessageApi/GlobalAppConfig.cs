@@ -1,4 +1,6 @@
-﻿using MessageApi.Domain;
+﻿using MessageApi.Application;
+using MessageApi.Domain;
+using MessageApi.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -12,7 +14,7 @@ public static class GlobalAppConfig
       builder.Services.AddScoped<IUserControllerRerieverBuilder>(b =>
       {
          IUserRepository userRepository = UserRepoFactory.GetRepository("sqlite");
-         UserControllerRetrieverBuilder controllerBuilder = new();
+         UserControllerRetrieverBuilder controllerBuilder = new("sqlite");
          controllerBuilder.AddUserRepository(userRepository).AddInputValidator(new InputValidator());
          return controllerBuilder;
       });
@@ -20,7 +22,7 @@ public static class GlobalAppConfig
       builder.Services.AddScoped<IUserControllerCreatorBuilder>(b =>
       {
          IUserRepository userRepository = UserRepoFactory.GetRepository("sqlite");
-         UserControllerCreatorBuilder controllerBuilder = new();
+         UserControllerCreatorBuilder controllerBuilder = new("sqlite");
          controllerBuilder.AddUserRepository(userRepository);
          return controllerBuilder;
       });
@@ -32,7 +34,7 @@ public static class GlobalAppConfig
       {
          IUserRepository userRepository = UserRepoFactory.GetRepository("sqlite");
          IMessageRepository messageRepository = MessageRepoFactory.GetRepository("sqlite");
-         MessageControllerRetrieverBuilder controllerBuilder = new();
+         MessageControllerRetrieverBuilder controllerBuilder = new("sqlite");
          controllerBuilder.AddMessageRepository(messageRepository).AddUserRepository(userRepository);
          return controllerBuilder;
       });
@@ -41,8 +43,21 @@ public static class GlobalAppConfig
       {
          IUserRepository userRepository = UserRepoFactory.GetRepository("sqlite");
          IMessageRepository messageRepository = MessageRepoFactory.GetRepository("sqlite");
-         MessageControllerCreatorBuilder controllerBuilder = new();
+         MessageControllerCreatorBuilder controllerBuilder = new("sqlite");
          controllerBuilder.AddMessageRepository(messageRepository).AddUserRepository(userRepository);
+         return controllerBuilder;
+      });
+   }
+
+   public static void InitialiseAuthenticationBuilder(WebApplicationBuilder builder)
+   {
+      builder.Services.AddScoped<IAuthenticationControllerBuilder>(b =>
+      {
+         IUserRepository userRepository = UserRepoFactory.GetRepository("sqlite");
+         ITokenGenerator tokenGen = new SimpleJwtTokenGenerator();
+         AuthenticationFieldValidatorBase authValidator = new AuthenticationFieldValidator();
+         AuthenticationControllerBuilder controllerBuilder = new("sqlite");
+         controllerBuilder.AddTokenGenerator(tokenGen).AddAuthenticationFieldValidator(authValidator).AddUserRepository(userRepository);
          return controllerBuilder;
       });
    }

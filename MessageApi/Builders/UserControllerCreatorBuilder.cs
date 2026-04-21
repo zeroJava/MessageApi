@@ -5,10 +5,17 @@ namespace MessageApi;
 
 public class UserControllerCreatorBuilder : IUserControllerCreatorBuilder
 {
+   readonly string defaultDbOption;
+
    IUserRepository? userRepository;
    IUserCreator? userCreator;
    INewUserUseCase? newUserCreater;
    UserFieldValidatorBase? userFieldValidator;
+
+   public UserControllerCreatorBuilder(string defauultDbOption)
+   {
+      this.defaultDbOption = defauultDbOption;
+   }
 
    public IUserControllerCreatorBuilder AddNewUserUseCase(INewUserUseCase userUseCase)
    {
@@ -36,7 +43,7 @@ public class UserControllerCreatorBuilder : IUserControllerCreatorBuilder
 
    public UserControllerCreatorOption Build()
    {
-      IUserRepository repository = userRepository ?? UserRepoFactory.GetRepository("sqlite");
+      IUserRepository repository = userRepository ?? UserRepoFactory.GetRepository(defaultDbOption);
       IUserCreator creator = userCreator ?? new UserCreator(repository);
       UserFieldValidatorBase fieldValidator = userFieldValidator ?? new UserFieldValidator(repository);
       INewUserUseCase newUserUseCase = newUserCreater ?? new NewUserService(creator, fieldValidator);

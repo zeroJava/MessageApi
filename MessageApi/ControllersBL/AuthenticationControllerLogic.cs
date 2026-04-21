@@ -4,9 +4,10 @@ namespace MessageApi.Controllers;
 
 public static class AuthenticationControllerLogic
 {
-   public static async Task<AuthToken> AuthenticateUser(AuthenticationRequest request, ITokenGenerator tokenGenerator)
+   public static async Task<AuthToken> AuthenticateUser(AuthenticationRequest request, IAuthenticationControllerBuilder authenticationControllerBuilder)
    {
-      UserAuthenticator userAuthenticator = new(tokenGenerator);
+      AuthenticationControllerOption option = authenticationControllerBuilder.Build();
+      UserAuthenticator userAuthenticator = new(option.TokenGenerator, option.UserRepository, option.AuthenticationFieldValidator);
       IUserAuthenticatorUseCase userAuthenticationService = new UserAuthenticatorService(userAuthenticator);
       return await userAuthenticationService.AuthenticateUser(request).ConfigureAwait(false);
    }

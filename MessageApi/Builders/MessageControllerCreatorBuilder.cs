@@ -6,12 +6,19 @@ namespace MessageApi;
 
 public class MessageControllerCreatorBuilder : IMessageControllerCreatorBuilder
 {
+   readonly string defaultDbOption;
+
    IUserRepository? userRepository;
    IMessageRepository? messageRepository;
    IMessageDispatchRepository? messageDispatchRepository;
    IRepoTransaction? repoTransaction;
    IMessageCreator? messageCreator;
    IMessageCreatorUseCase? messageCreatorUseCase;
+
+   public MessageControllerCreatorBuilder(string defaultDbOption)
+   {
+      this.defaultDbOption = defaultDbOption;
+   }
 
    public IMessageControllerCreatorBuilder AddMessageCreator(IMessageCreator creator)
    {
@@ -51,9 +58,9 @@ public class MessageControllerCreatorBuilder : IMessageControllerCreatorBuilder
 
    public MessageControllerCreatorOption Build()
    {
-      IUserRepository userRepo = userRepository ?? UserRepoFactory.GetRepository("sqlite");
-      IMessageRepository messageRepo = messageRepository ?? MessageRepoFactory.GetRepository("sqlite");
-      IMessageDispatchRepository dispatchRepo = messageDispatchRepository ?? MessageDispatcherRepoFactory.GetRepository("sqlite");
+      IUserRepository userRepo = userRepository ?? UserRepoFactory.GetRepository(defaultDbOption);
+      IMessageRepository messageRepo = messageRepository ?? MessageRepoFactory.GetRepository(defaultDbOption);
+      IMessageDispatchRepository dispatchRepo = messageDispatchRepository ?? MessageDispatcherRepoFactory.GetRepository(defaultDbOption);
       IRepoTransaction repoTransaction = this.repoTransaction ?? new RepoTransaction();
       IMessageCreator creator = messageCreator ?? new MessageCreator(userRepo, messageRepo, dispatchRepo, repoTransaction);
       IMessageCreatorUseCase messageCreatorService = messageCreatorUseCase ?? new NewMessageService(creator);

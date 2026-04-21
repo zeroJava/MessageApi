@@ -5,12 +5,18 @@ namespace MessageApi;
 
 public class MessageControllerRetrieverBuilder : IMessageControllerRetrieverBuilder
 {
+   readonly string defaultDbOption;
+
    IUserRepository? userRepository;
    IMessageRepository? messageRepository;
    IMessageDispatchRepository? messageDispatchRepository;
    IMessageRetriever? messageRetriever;
    IMessageRetrieverUseCase? messageRetrieverUseCase;
-   ITokenValidator? tokenValidator;
+
+   public MessageControllerRetrieverBuilder(string defaultDbOption)
+   {
+      this.defaultDbOption = defaultDbOption;
+   }
 
    public IMessageControllerRetrieverBuilder AddMessageDispatchRepository(IMessageDispatchRepository repository)
    {
@@ -36,12 +42,6 @@ public class MessageControllerRetrieverBuilder : IMessageControllerRetrieverBuil
       return this;
    }
 
-   public IMessageControllerRetrieverBuilder AddTokenValidator(ITokenValidator tokenValidator)
-   {
-      this.tokenValidator = tokenValidator;
-      return this;
-   }
-
    public IMessageControllerRetrieverBuilder AddUserRepository(IUserRepository repository)
    {
       userRepository = repository;
@@ -50,9 +50,9 @@ public class MessageControllerRetrieverBuilder : IMessageControllerRetrieverBuil
 
    public MessageControllerRetrieverOption Build()
    {
-      IUserRepository userRepo = userRepository ?? UserRepoFactory.GetRepository("sqlite");
-      IMessageRepository messageRepo = messageRepository ?? MessageRepoFactory.GetRepository("sqlite");
-      IMessageDispatchRepository dispatchRepo = messageDispatchRepository ?? MessageDispatcherRepoFactory.GetRepository("sqlite");
+      IUserRepository userRepo = userRepository ?? UserRepoFactory.GetRepository(defaultDbOption);
+      IMessageRepository messageRepo = messageRepository ?? MessageRepoFactory.GetRepository(defaultDbOption);
+      IMessageDispatchRepository dispatchRepo = messageDispatchRepository ?? MessageDispatcherRepoFactory.GetRepository(defaultDbOption);
       IMessageRetriever retriever = messageRetriever ?? new MessageRetriever(userRepo, messageRepo, dispatchRepo);
       IMessageRetrieverUseCase messageRetrieveService = messageRetrieverUseCase ?? new RetrieveMessageService(retriever);
       return new MessageControllerRetrieverOption()

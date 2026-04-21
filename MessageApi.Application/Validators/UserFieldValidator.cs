@@ -46,19 +46,22 @@ public class UserFieldValidator : UserFieldValidatorBase
 
    public override void Validate(NewUserData newuser)
    {
-      CheckUsernameAlreadyExist(newuser.UserName);
-      CheckEmailAlreadyExist(newuser.EmailAddress);
-      CheckDateOfBirthFormat(newuser.Dob.ToString());
+      DoValidation(newuser);
    }
 
    public override async Task ValidateAsync(NewUserData newuser)
    {
       await Task.Run(() =>
       {
-         CheckUsernameAlreadyExist(newuser.UserName);
-         CheckEmailAlreadyExist(newuser.EmailAddress);
-         CheckDateOfBirthFormat(newuser.Dob.ToString());
+         DoValidation(newuser);
       }).ConfigureAwait(false);
+   }
+
+   void DoValidation(NewUserData newuser)
+   {
+      CheckUsernameAlreadyExist(newuser.UserName);
+      CheckEmailAlreadyExist(newuser.EmailAddress);
+      CheckDateOfBirthFormat(newuser.Dob.ToString());
    }
 }
 

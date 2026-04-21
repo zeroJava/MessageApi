@@ -1,4 +1,6 @@
-﻿namespace MessageApi.Application;
+﻿using MessageApi.Domain;
+
+namespace MessageApi.Application;
 
 public interface IUserAuthenticator
 {
@@ -8,19 +10,22 @@ public interface IUserAuthenticator
 public class UserAuthenticator : IUserAuthenticator
 {
    readonly ITokenGenerator tokenGenerator;
+   readonly IUserRepository userRepository;
+   readonly AuthenticationFieldValidatorBase authenticationFieldValidator;
 
-   public UserAuthenticator(ITokenGenerator tokenService)
+   public UserAuthenticator(ITokenGenerator tokenGenerator, IUserRepository userRepository, AuthenticationFieldValidatorBase authenticationFieldValidator)
    {
-      this.tokenGenerator = tokenService;
+      this.tokenGenerator = tokenGenerator;
+      this.userRepository = userRepository;
+      this.authenticationFieldValidator = authenticationFieldValidator;
    }
 
    public async Task<AuthToken> AuthenticateUser(AuthenticationRequest request)
    {
-      string token = "undefined";
-      if (request.Username == "testuser" && request.Password == "testpassword") // replace
-      {
-         token = tokenGenerator.GenerateToken(request.Username, "standard");
-      }
+      await authenticationFieldValidator.ValidateFieldAsync(request).ConfigureAwait(false);
+      User? user = userRepository.GetUserMatchingUsername(request.Username);
+      await authenticationFieldValidator.ValidateAsync(request, user).ConfigureAwait(false);
+      string token = tokenGenerator.GenerateToken(request.Username, "standard");
       return new()
       {
          UserName = request.Username,
