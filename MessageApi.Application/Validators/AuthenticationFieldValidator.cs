@@ -38,17 +38,31 @@ public class AuthenticationFieldValidator : AuthenticationFieldValidatorBase
       }).ConfigureAwait(false);
    }
 
-   static void DoValidateAsync(AuthenticationRequest request, User? user)
+   void DoValidateAsync(AuthenticationRequest request, User? user)
    {
       if (user is null)
       {
          throw new AuthenticationValidationException("Error validationg user");
       }
-      if (request.Username != user.UserName)
+      CheckUsernameMatch(request, user);
+      CheckPasswordMatch(request, user);
+   }
+
+   void CheckUsernameMatch(AuthenticationRequest request, User user)
+   {
+      string decryptedRequestUsername = request.Username;
+      string decryptedUserUsername = user.UserName;
+      if (decryptedRequestUsername != decryptedUserUsername)
       {
          throw new AuthenticationValidationException("Username does not match");
       }
-      if (request.Password != user.Password)
+   }
+
+   void CheckPasswordMatch(AuthenticationRequest request, User user)
+   {
+      string decryptedRequestPassword = request.Password;
+      string decryptedUserPassword = user.Password;
+      if (decryptedRequestPassword != decryptedUserPassword)
       {
          throw new AuthenticationValidationException("Password does not match");
       }
