@@ -11,6 +11,7 @@ builder.Services.AddOpenApi();
 
 GlobalAppConfig.InitialiseUserBuilder(builder);
 GlobalAppConfig.InitialiseMessageBuilder(builder);
+GlobalAppConfig.InitialiseAuthenticationBuilder(builder);
 GlobalAppConfig.InitialiseTokenGenerator(builder);
 
 var app = builder.Build();
