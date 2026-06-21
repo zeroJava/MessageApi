@@ -7,7 +7,7 @@ public static class MessageControllerLogic
    public static async Task<MessageRequestState> NewMessage(MessageRequest request, IMessageControllerCreatorBuilder builder)
    {
       MessageControllerCreatorOption option = builder.Build();
-      IMessageCreatorUseCase messageService = option.NewMessageService;
+      IMessageServiceUseCase messageService = option.NewMessageService;
       return await messageService.Create(request).ConfigureAwait(false);
    }
 

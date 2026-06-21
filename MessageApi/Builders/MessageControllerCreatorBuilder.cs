@@ -13,7 +13,7 @@ public class MessageControllerCreatorBuilder : IMessageControllerCreatorBuilder
    IMessageDispatchRepository? messageDispatchRepository;
    IRepoTransaction? repoTransaction;
    IMessageCreator? messageCreator;
-   IMessageCreatorUseCase? messageCreatorUseCase;
+   IMessageServiceUseCase? messageCreatorUseCase;
 
    public MessageControllerCreatorBuilder(string defaultDbOption)
    {
@@ -38,7 +38,7 @@ public class MessageControllerCreatorBuilder : IMessageControllerCreatorBuilder
       return this;
    }
 
-   public IMessageControllerCreatorBuilder AddNewMessageCreatorUseCase(IMessageCreatorUseCase creatorUseCase)
+   public IMessageControllerCreatorBuilder AddNewMessageCreatorUseCase(IMessageServiceUseCase creatorUseCase)
    {
       messageCreatorUseCase = creatorUseCase;
       return this;
@@ -63,7 +63,7 @@ public class MessageControllerCreatorBuilder : IMessageControllerCreatorBuilder
       IMessageDispatchRepository dispatchRepo = messageDispatchRepository ?? MessageDispatcherRepoFactory.GetRepository(defaultDbOption);
       IRepoTransaction repoTransaction = this.repoTransaction ?? new RepoTransaction();
       IMessageCreator creator = messageCreator ?? new MessageCreator(userRepo, messageRepo, dispatchRepo, repoTransaction);
-      IMessageCreatorUseCase messageCreatorService = messageCreatorUseCase ?? new NewMessageService(creator);
+      IMessageServiceUseCase messageCreatorService = messageCreatorUseCase ?? new MessageService(creator);
       return new MessageControllerCreatorOption()
       {
          MessageCreator = creator,
