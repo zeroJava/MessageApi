@@ -39,11 +39,11 @@ public static class GlobalAppConfig
          return controllerBuilder;
       });
 
-      builder.Services.AddScoped<IMessageControllerCreatorBuilder>(b =>
+      builder.Services.AddScoped<IMessageControllerBuilder>(b =>
       {
          IUserRepository userRepository = UserRepoFactory.GetRepository("sqlite");
          IMessageRepository messageRepository = MessageRepoFactory.GetRepository("sqlite");
-         MessageControllerCreatorBuilder controllerBuilder = new("sqlite");
+         MessageControllerBuilder controllerBuilder = new("sqlite");
          controllerBuilder.AddMessageRepository(messageRepository).AddUserRepository(userRepository);
          return controllerBuilder;
       });

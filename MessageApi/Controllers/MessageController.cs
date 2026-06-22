@@ -10,13 +10,11 @@ namespace MessageApi.Controllers;
 [Route("[controller]")]
 public class MessageController : ControllerBase
 {
-   IMessageControllerCreatorBuilder messageControllerCreatorBuilder;
-   IMessageControllerRetrieverBuilder messageControllerRetrieverBuilder;
+   IMessageControllerBuilder messageControllerBuilder;
 
-   public MessageController(IMessageControllerCreatorBuilder messageControllerCreatorBuilder, IMessageControllerRetrieverBuilder messageControllerRetrieverBuilder)
+   public MessageController(IMessageControllerBuilder messageControllerBuilder)
    {
-      this.messageControllerCreatorBuilder = messageControllerCreatorBuilder;
-      this.messageControllerRetrieverBuilder = messageControllerRetrieverBuilder;
+      this.messageControllerBuilder = messageControllerBuilder;
    }
 
    [Authorize]
@@ -26,7 +24,7 @@ public class MessageController : ControllerBase
    {
       try
       {
-         MessageRequestState state = await MessageControllerLogic.NewMessage(request, messageControllerCreatorBuilder).ConfigureAwait(false);
+         MessageRequestState state = await MessageControllerLogic.NewMessage(request, messageControllerBuilder).ConfigureAwait(false);
          return Ok(state);
       }
       catch (Exception ex)
@@ -43,7 +41,7 @@ public class MessageController : ControllerBase
    {
       try
       {
-         List<MessageInfo> messages = await MessageControllerLogic.GetConversation(request, messageControllerRetrieverBuilder).ConfigureAwait(false);
+         List<MessageInfo> messages = await MessageControllerLogic.GetConversation(request, messageControllerBuilder).ConfigureAwait(false);
          return Ok(messages);
       }
       catch (Exception ex)
@@ -60,7 +58,7 @@ public class MessageController : ControllerBase
    {
       try
       {
-         List<MessageInfo> messages = await MessageControllerLogic.GetMessagesSentToUser(request, messageControllerRetrieverBuilder).ConfigureAwait(false);
+         List<MessageInfo> messages = await MessageControllerLogic.GetMessagesSentToUser(request, messageControllerBuilder).ConfigureAwait(false);
          return Ok(messages);
       }
       catch (Exception ex)

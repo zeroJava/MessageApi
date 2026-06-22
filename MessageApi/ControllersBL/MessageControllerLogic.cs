@@ -4,24 +4,24 @@ namespace MessageApi.ControllersBL;
 
 public static class MessageControllerLogic
 {
-   public static async Task<MessageRequestState> NewMessage(MessageRequest request, IMessageControllerCreatorBuilder builder)
+   public static async Task<MessageRequestState> NewMessage(MessageRequest request, IMessageControllerBuilder builder)
    {
-      MessageControllerCreatorOption option = builder.Build();
-      IMessageServiceUseCase messageService = option.NewMessageService;
+      MessageControllerOption option = builder.Build();
+      IMessageServiceUseCase messageService = option.MessageService;
       return await messageService.Create(request).ConfigureAwait(false);
    }
 
-   public static async Task<List<MessageInfo>> GetMessagesSentToUser(RetrieveMessageRequest request, IMessageControllerRetrieverBuilder builder)
+   public static async Task<List<MessageInfo>> GetMessagesSentToUser(RetrieveMessageRequest request, IMessageControllerBuilder builder)
    {
-      MessageControllerRetrieverOption option = builder.Build();
-      IMessageRetrieverUseCase messageService = option.RetrieveMessageService;
+      MessageControllerOption option = builder.Build();
+      IMessageServiceUseCase messageService = option.MessageService;
       return await messageService.GetMessagesSentToUser(request).ConfigureAwait(false);
    }
 
-   public static async Task<List<MessageInfo>> GetConversation(RetrieveMessageRequest request, IMessageControllerRetrieverBuilder builder)
+   public static async Task<List<MessageInfo>> GetConversation(RetrieveMessageRequest request, IMessageControllerBuilder builder)
    {
-      MessageControllerRetrieverOption option = builder.Build();
-      IMessageRetrieverUseCase messageService = option.RetrieveMessageService;
+      MessageControllerOption option = builder.Build();
+      IMessageServiceUseCase messageService = option.MessageService;
       return await messageService.GetConversation(request).ConfigureAwait(false);
    }
 }
