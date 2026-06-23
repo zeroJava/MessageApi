@@ -32,6 +32,7 @@ public class MessageService : IMessageServiceUseCase
       // Token validation here
       ConversationRequest conversationRequest = new()
       {
+         Username = messageRequest.Username,
          MessageIdThreshold = messageRequest.MessageIdThreshold,
          NumberOfMessages = messageRequest.NumberOfMessages,
          ReceiverEmailAddress = messageRequest.ReceiverEmailAddress,
@@ -45,7 +46,8 @@ public class MessageService : IMessageServiceUseCase
       // Token validation here
       MessagesToUserRequest request = new()
       {
-         SenderEmailAddress = messageRequest.SenderEmailAddress,
+         Username = messageRequest.Username,
+         ReceiverEmailAddress = messageRequest.SenderEmailAddress,
       };
       return await getMessagesToUserHandler.Handle(request);
    }

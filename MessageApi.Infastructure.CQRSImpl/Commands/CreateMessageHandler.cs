@@ -1,13 +1,9 @@
-﻿using MessageApi.Domain;
+﻿using MessageApi.Application;
+using MessageApi.Domain;
 
-namespace MessageApi.Application;
+namespace MessageApi.Infrastructure.CQRSImpl;
 
-public interface IMessageCreator
-{
-   MessageRequestState Create(MessageRequest request);
-}
-
-public class MessageCreator : IMessageCreator
+public class CreateMessageHandler : ICreateMessageHandler
 {
    static readonly MessageRequestState MessageSuccess = new()
    {
@@ -20,7 +16,7 @@ public class MessageCreator : IMessageCreator
    readonly IMessageDispatchRepository messageDispatchRepository;
    readonly IRepoTransaction repoTransaction;
 
-   public MessageCreator(IUserRepository userRepository, IMessageRepository messageRepository, IMessageDispatchRepository messageDispatchRepository,
+   public CreateMessageHandler(IUserRepository userRepository, IMessageRepository messageRepository, IMessageDispatchRepository messageDispatchRepository,
       IRepoTransaction repoTransaction)
    {
       this.userRepository = userRepository;
@@ -29,14 +25,14 @@ public class MessageCreator : IMessageCreator
       this.repoTransaction = repoTransaction;
    }
 
-   public MessageRequestState Create(MessageRequest request)
+   public async Task<MessageRequestState> Handle(CreateMessageRequest request)
    {
       User user = UserHelper.GetUser(userRepository, request.UserName);
       ProcessRequest(request, user);
       return MessageSuccess;
    }
 
-   void ProcessRequest(MessageRequest request, User user)
+   void ProcessRequest(CreateMessageRequest request, User user)
    {
       try
       {
@@ -52,7 +48,7 @@ public class MessageCreator : IMessageCreator
       }
    }
 
-   Message CreateMessage(MessageRequest request, User user)
+   Message CreateMessage(CreateMessageRequest request, User user)
    {
       Message message = new()
       {
@@ -66,7 +62,7 @@ public class MessageCreator : IMessageCreator
       return message;
    }
 
-   void CreateDispatch(MessageRequest request, Message message)
+   void CreateDispatch(CreateMessageRequest request, Message message)
    {
       foreach (string emailAddress in request.EmailAccounts)
       {

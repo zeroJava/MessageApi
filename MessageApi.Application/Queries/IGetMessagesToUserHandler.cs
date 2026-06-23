@@ -7,5 +7,6 @@ public interface IGetMessagesToUserHandler
 
 public record MessagesToUserRequest
 {
-   public required string SenderEmailAddress { get; set; }
+   public required string Username { get; set; }
+   public required string ReceiverEmailAddress { get; set; }
 }

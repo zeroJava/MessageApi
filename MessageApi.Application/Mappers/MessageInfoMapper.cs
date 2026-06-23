@@ -2,7 +2,7 @@
 
 namespace MessageApi.Application;
 
-internal class MessageInfoMapper : MapperBase<MessageDispatch, MessageInfo>
+public class MessageInfoMapper : MapperBase<MessageDispatch, MessageInfo>
 {
    public override MessageInfo? Map(MessageDispatch? entity)
    {

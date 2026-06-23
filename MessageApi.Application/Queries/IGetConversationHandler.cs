@@ -7,6 +7,7 @@ public interface IGetConversationHandler
 
 public record ConversationRequest
 {
+   public required string Username { get; set; }
    public required string SenderEmailAddress { get; set; }
    public required string ReceiverEmailAddress { get; set; }
    public required long MessageIdThreshold { get; set; }

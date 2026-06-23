@@ -1,14 +1,9 @@
-﻿using MessageApi.Domain;
+﻿using MessageApi.Application;
+using MessageApi.Domain;
 
-namespace MessageApi.Application;
+namespace MessageApi.Infastructure.CQRSImpl;
 
-public interface IMessageRetriever
-{
-   List<MessageInfo> GetMessagesSentToUser(RetrieveMessageRequest messageRequest);
-   List<MessageInfo> GetConversation(RetrieveMessageRequest messageRequest);
-}
-
-public class MessageRetriever : IMessageRetriever
+public class GetMessagesToUserHandler : IGetMessagesToUserHandler
 {
    readonly IUserRepository userRepository;
    readonly IMessageRepository messageRepository;
@@ -16,17 +11,17 @@ public class MessageRetriever : IMessageRetriever
    readonly MessageInfoMapper mapper = new();
    readonly Helper helper = new();
 
-   public MessageRetriever(IUserRepository userRepository, IMessageRepository messageRepository, IMessageDispatchRepository messageDispatchRepository)
+   public GetMessagesToUserHandler(IUserRepository userRepository, IMessageRepository messageRepository, IMessageDispatchRepository messageDispatchRepository)
    {
       this.userRepository = userRepository;
       this.messageRepository = messageRepository;
       this.messageDispatchRepository = messageDispatchRepository;
    }
 
-   public List<MessageInfo> GetMessagesSentToUser(RetrieveMessageRequest messageRequest)
+   public async Task<List<MessageInfo>> Handle(MessagesToUserRequest request)
    {
-      User user = UserHelper.GetUser(userRepository, messageRequest.Username);
-      return GetMessagesSent(user.Id, messageRequest.ReceiverEmailAddress);
+      User user = UserHelper.GetUser(userRepository, request.Username);
+      return GetMessagesSent(user.Id, request.ReceiverEmailAddress);
    }
 
    List<MessageInfo> GetMessagesSent(long userId, string receiverEmail)
@@ -42,23 +37,6 @@ public class MessageRetriever : IMessageRetriever
          }
       }
       return helper.GetDispatchInfo(dispatches, userId, mapper);
-   }
-
-   public List<MessageInfo> GetConversation(RetrieveMessageRequest messageRequest)
-   {
-      User user = UserHelper.GetUser(userRepository, messageRequest.Username);
-      List<MessageInfo> postedMessages = GetDispathces(messageRequest, user);
-      return postedMessages;
-   }
-
-   List<MessageInfo> GetDispathces(RetrieveMessageRequest request, User user)
-   {
-      List<MessageDispatch> dispatches = messageDispatchRepository.GetDispatchesSenderReceiver(request.SenderEmailAddress,
-         request.ReceiverEmailAddress,
-         request.MessageIdThreshold,
-         request.NumberOfMessages);
-      List<MessageInfo> dispatchInfos = helper.GetDispatchInfo(dispatches, user.Id, mapper);
-      return dispatchInfos;
    }
 
    class Helper
