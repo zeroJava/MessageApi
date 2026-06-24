@@ -1,6 +1,8 @@
 ﻿using MessageApi.Application;
 using MessageApi.Domain;
 using MessageApi.Infrastructure;
+using MessageApi.Infrastructure.CQRSImpl;
+using MessageApi.Infrastructure.Sqlite;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -30,21 +32,20 @@ public static class GlobalAppConfig
 
    public static void InitialiseMessageBuilder(WebApplicationBuilder builder)
    {
-      builder.Services.AddScoped<IMessageControllerRetrieverBuilder>(b =>
-      {
-         IUserRepository userRepository = UserRepoFactory.GetRepository("sqlite");
-         IMessageRepository messageRepository = MessageRepoFactory.GetRepository("sqlite");
-         MessageControllerRetrieverBuilder controllerBuilder = new("sqlite");
-         controllerBuilder.AddMessageRepository(messageRepository).AddUserRepository(userRepository);
-         return controllerBuilder;
-      });
-
       builder.Services.AddScoped<IMessageControllerBuilder>(b =>
       {
          IUserRepository userRepository = UserRepoFactory.GetRepository("sqlite");
          IMessageRepository messageRepository = MessageRepoFactory.GetRepository("sqlite");
-         MessageControllerBuilder controllerBuilder = new("sqlite");
-         controllerBuilder.AddMessageRepository(messageRepository).AddUserRepository(userRepository);
+         IMessageDispatchRepository dispatchRepository = MessageDispatcherRepoFactory.GetRepository("sqlite");
+         IRepoTransaction repoTransaction = new RepoTransaction();
+
+         ICreateMessageHandler createMessageHandler = new CreateMessageHandler(userRepository, messageRepository, dispatchRepository, repoTransaction);
+         IGetConversationHandler getConversationHandler = new GetConversationHandler(userRepository, dispatchRepository);
+         IGetMessagesToUserHandler getMessagesToUserHandler = new GetMessagesToUserHandler(userRepository, messageRepository, dispatchRepository);
+         
+         IMessageServiceUseCase messageService = new MessageService(createMessageHandler, getConversationHandler, getMessagesToUserHandler);
+         MessageControllerBuilder controllerBuilder = new();
+         controllerBuilder.AddMessageService(messageService);
          return controllerBuilder;
       });
    }

@@ -1,7 +1,7 @@
 ﻿using MessageApi.Application;
 using MessageApi.Domain;
 
-namespace MessageApi.Infastructure.CQRSImpl;
+namespace MessageApi.Infrastructure.CQRSImpl;
 
 public class GetMessagesToUserHandler : IGetMessagesToUserHandler
 {
