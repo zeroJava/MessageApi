@@ -42,7 +42,7 @@ public static class GlobalAppConfig
          ICreateMessageHandler createMessageHandler = new CreateMessageHandler(userRepository, messageRepository, dispatchRepository, repoTransaction);
          IGetConversationHandler getConversationHandler = new GetConversationHandler(userRepository, dispatchRepository);
          IGetMessagesToUserHandler getMessagesToUserHandler = new GetMessagesToUserHandler(userRepository, messageRepository, dispatchRepository);
-         
+
          IMessageServiceUseCase messageService = new MessageService(createMessageHandler, getConversationHandler, getMessagesToUserHandler);
          MessageControllerBuilder controllerBuilder = new();
          controllerBuilder.AddMessageService(messageService);
