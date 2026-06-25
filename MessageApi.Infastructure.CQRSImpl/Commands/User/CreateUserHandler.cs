@@ -2,26 +2,20 @@
 
 namespace MessageApi.Application;
 
-public interface IUserCreator
-{
-   Task<UserDto> CreateNewUser(NewUserData newuser);
-}
-
-public class UserCreator : IUserCreator
+public class CreateUserHandler : ICreateUserHandler
 {
    readonly IUserRepository userRepository;
-   readonly UserMapper userMapper = new();
 
-   public UserCreator(IUserRepository userRepository)
+   public CreateUserHandler(IUserRepository userRepository)
    {
       this.userRepository = userRepository;
    }
 
-   public async Task<UserDto> CreateNewUser(NewUserData newuser)
+   public async Task<NewUserResponse> Handle(NewUserData newuser)
    {
       User user = Helper.Extract(newuser);
       userRepository.InsertUser(user);
-      return userMapper.Map(user)!;
+      return ResponseMapper.Map(user);
    }
 
    class Helper
@@ -38,6 +32,19 @@ public class UserCreator : IUserCreator
             DOB = newuser.Dob,
             EmailAddress = newuser.EmailAddress,
             Gender = newuser.Gender,
+         };
+      }
+   }
+
+   class ResponseMapper
+   {
+      public static NewUserResponse Map(User? entity)
+      {
+         return new NewUserResponse()
+         {
+            Id = entity?.Id ?? 0,
+            UserName = entity?.UserName ?? string.Empty,
+            State = entity is not null,
          };
       }
    }

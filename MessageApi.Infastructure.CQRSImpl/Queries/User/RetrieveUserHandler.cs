@@ -2,22 +2,17 @@
 
 namespace MessageApi.Application;
 
-public interface IUserRetriever
-{
-   UserDto? GetUser(string username);
-}
-
-public class UserRetriever : IUserRetriever
+public class RetrieveUserHandler : IRetrieveUserHandler
 {
    readonly IUserRepository userRepository;
    readonly UserMapper userMapper = new();
 
-   public UserRetriever(IUserRepository userRepository)
+   public RetrieveUserHandler(IUserRepository userRepository)
    {
       this.userRepository = userRepository;
    }
 
-   public UserDto? GetUser(string username)
+   public async Task<UserDto?> Handle(string username)
    {
       User? user = userRepository.GetUserMatchingUsername(username);
       return userMapper.Map(user);

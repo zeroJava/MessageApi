@@ -1,5 +1,4 @@
-﻿using MessageApi.Application;
-using MessageApi.Domain;
+﻿using MessageApi.Domain;
 
 namespace MessageApi;
 

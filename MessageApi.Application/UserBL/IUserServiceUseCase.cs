@@ -1,6 +1,7 @@
 ﻿namespace MessageApi.Application;
 
-public interface IRetrieveUserUseCase
+public interface IUserServiceUseCase
 {
+   Task<NewUserResponse> Create(NewUserData newuser);
    Task<UserDto?> GetUser(AuthToken token, string username);
 }

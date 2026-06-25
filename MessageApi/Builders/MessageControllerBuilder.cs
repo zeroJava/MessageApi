@@ -5,6 +5,9 @@ namespace MessageApi;
 public interface IMessageControllerBuilder
 {
    IMessageControllerBuilder AddMessageService(IMessageServiceUseCase messageService);
+   IMessageControllerBuilder AddCreateMessageHandler(ICreateMessageHandler createMessageHandler);
+   IMessageControllerBuilder AddGetConversationHandler(IGetConversationHandler conversationHandler);
+   IMessageControllerBuilder AddGetMessagesToUserHandler(IGetMessagesToUserHandler messagesToUserHandler);
    MessageControllerOption Build();
 }
 
@@ -15,10 +18,27 @@ public sealed record MessageControllerOption
 
 public class MessageControllerBuilder : IMessageControllerBuilder
 {
-   IMessageServiceUseCase? messageService { get; set; }
+   IMessageServiceUseCase? messageService;
+   ICreateMessageHandler? createMessageHandler;
+   IGetConversationHandler? conversationHandler;
+   IGetMessagesToUserHandler? messagesToUserHandler;
 
-   public MessageControllerBuilder()
+   public IMessageControllerBuilder AddCreateMessageHandler(ICreateMessageHandler createMessageHandler)
    {
+      this.createMessageHandler = createMessageHandler;
+      return this;
+   }
+
+   public IMessageControllerBuilder AddGetConversationHandler(IGetConversationHandler conversationHandler)
+   {
+      this.conversationHandler = conversationHandler;
+      return this;
+   }
+
+   public IMessageControllerBuilder AddGetMessagesToUserHandler(IGetMessagesToUserHandler messagesToUserHandler)
+   {
+      this.messagesToUserHandler = messagesToUserHandler;
+      return this;
    }
 
    public IMessageControllerBuilder AddMessageService(IMessageServiceUseCase messageService)
@@ -33,10 +53,16 @@ public class MessageControllerBuilder : IMessageControllerBuilder
       {
          return new ApplicationException($"Property: {name} was not initialised");
       }
-      IMessageServiceUseCase messageServiceToUse = messageService ?? throw error(nameof(messageService));
+      if (messageService is null)
+      {
+         ICreateMessageHandler createMessageHndlr = createMessageHandler ?? throw error(nameof(createMessageHandler));
+         IGetConversationHandler conversationHndlr = conversationHandler ?? throw error(nameof(conversationHandler));
+         IGetMessagesToUserHandler messagesToUserHndlr = messagesToUserHandler ?? throw error(nameof(messagesToUserHandler));
+         messageService = new MessageService(createMessageHndlr, conversationHndlr, messagesToUserHndlr);
+      }
       return new MessageControllerOption()
       {
-         MessageService = messageServiceToUse,
+         MessageService = messageService ?? throw error(nameof(messageService)),
       };
    }
 }

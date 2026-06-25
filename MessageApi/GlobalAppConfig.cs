@@ -43,9 +43,10 @@ public static class GlobalAppConfig
          IGetConversationHandler getConversationHandler = new GetConversationHandler(userRepository, dispatchRepository);
          IGetMessagesToUserHandler getMessagesToUserHandler = new GetMessagesToUserHandler(userRepository, messageRepository, dispatchRepository);
 
-         IMessageServiceUseCase messageService = new MessageService(createMessageHandler, getConversationHandler, getMessagesToUserHandler);
+         //IMessageServiceUseCase messageService = new MessageService(createMessageHandler, getConversationHandler, getMessagesToUserHandler);
          MessageControllerBuilder controllerBuilder = new();
-         controllerBuilder.AddMessageService(messageService);
+         controllerBuilder.AddCreateMessageHandler(createMessageHandler).AddGetConversationHandler(getConversationHandler)
+            .AddGetMessagesToUserHandler(getMessagesToUserHandler);
          return controllerBuilder;
       });
    }

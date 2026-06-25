@@ -6,8 +6,8 @@ namespace MessageApi;
 public interface IUserControllerCreatorBuilder
 {
    IUserControllerCreatorBuilder AddUserRepository(IUserRepository repository);
-   IUserControllerCreatorBuilder AddUserCreator(IUserCreator creator);
-   IUserControllerCreatorBuilder AddNewUserUseCase(INewUserUseCase userUseCase);
+   IUserControllerCreatorBuilder AddUserCreator(ICreateUserHandler creator);
+   IUserControllerCreatorBuilder AddNewUserUseCase(IUserServiceUseCase userUseCase);
    IUserControllerCreatorBuilder AddUserFieldValidator(UserFieldValidatorBase fieldValidator);
    public UserControllerCreatorOption Build();
 }
@@ -15,7 +15,7 @@ public interface IUserControllerCreatorBuilder
 public sealed class UserControllerCreatorOption
 {
    public required IUserRepository UserRepository { get; set; }
-   public required IUserCreator UserCreator { get; set; }
-   public required INewUserUseCase NewUserService { get; set; }
+   public required ICreateUserHandler UserCreator { get; set; }
+   public required IUserServiceUseCase NewUserService { get; set; }
    public required UserFieldValidatorBase UserFieldValidator { get; set; }
 }

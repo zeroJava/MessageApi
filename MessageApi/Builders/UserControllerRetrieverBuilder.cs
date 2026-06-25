@@ -44,7 +44,7 @@ public class UserControllerRetrieverBuilder : IUserControllerRerieverBuilder
    public UserControllerRetrieverOption Build()
    {
       IUserRepository repository = userRepository ?? UserRepoFactory.GetRepository(defaultDbOption);
-      IUserRetriever retriever = userRetriever ?? new UserRetriever(repository);
+      IUserRetriever retriever = userRetriever ?? new RetrieveUserHandler(repository);
       IInputValidator<string>? inptValidtr = inputValidator ?? new InputValidator();
       IRetrieveUserUseCase retrieveUserL = retrieveUser ?? new RetrieveUserService(retriever, inptValidtr);
       return new UserControllerRetrieverOption

@@ -8,8 +8,8 @@ public class UserControllerCreatorBuilder : IUserControllerCreatorBuilder
    readonly string defaultDbOption;
 
    IUserRepository? userRepository;
-   IUserCreator? userCreator;
-   INewUserUseCase? newUserCreater;
+   ICreateUserHandler? userCreator;
+   IUserServiceUseCase? newUserCreater;
    UserFieldValidatorBase? userFieldValidator;
 
    public UserControllerCreatorBuilder(string defauultDbOption)
@@ -17,13 +17,13 @@ public class UserControllerCreatorBuilder : IUserControllerCreatorBuilder
       this.defaultDbOption = defauultDbOption;
    }
 
-   public IUserControllerCreatorBuilder AddNewUserUseCase(INewUserUseCase userUseCase)
+   public IUserControllerCreatorBuilder AddNewUserUseCase(IUserServiceUseCase userUseCase)
    {
       this.newUserCreater = userUseCase;
       return this;
    }
 
-   public IUserControllerCreatorBuilder AddUserCreator(IUserCreator creator)
+   public IUserControllerCreatorBuilder AddUserCreator(ICreateUserHandler creator)
    {
       this.userCreator = creator;
       return this;
@@ -44,9 +44,9 @@ public class UserControllerCreatorBuilder : IUserControllerCreatorBuilder
    public UserControllerCreatorOption Build()
    {
       IUserRepository repository = userRepository ?? UserRepoFactory.GetRepository(defaultDbOption);
-      IUserCreator creator = userCreator ?? new UserCreator(repository);
+      ICreateUserHandler creator = userCreator ?? new CreateUserHandler(repository);
       UserFieldValidatorBase fieldValidator = userFieldValidator ?? new UserFieldValidator(repository);
-      INewUserUseCase newUserUseCase = newUserCreater ?? new NewUserService(creator, fieldValidator);
+      IUserServiceUseCase newUserUseCase = newUserCreater ?? new UserService(creator, fieldValidator);
       return new UserControllerCreatorOption()
       {
          UserRepository = repository,

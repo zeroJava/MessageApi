@@ -7,7 +7,7 @@ public static class UserControllerLogic
    public static async Task<UserDto> CreateUser(NewUserData newuser, IUserControllerCreatorBuilder controllerCreatorBuilder)
    {
       UserControllerCreatorOption option = controllerCreatorBuilder.Build();
-      INewUserUseCase newUserService = option.NewUserService;
+      IUserServiceUseCase newUserService = option.NewUserService;
       return await newUserService.Create(newuser);
    }
 

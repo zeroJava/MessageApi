@@ -2,7 +2,7 @@
 
 namespace MessageApi.Application;
 
-internal class UserMapper : MapperBase<User, UserDto>
+public class UserMapper : MapperBase<User, UserDto>
 {
    public override UserDto? Map(User? entity)
    {
