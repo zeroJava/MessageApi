@@ -1,19 +1,19 @@
 ﻿namespace MessageApi.Application;
 
-public class UserAuthenticatorService : IUserAuthenticatorUseCase
+public class UserAuthenticationService : IUserAuthenticationServiceUseCase
 {
-   readonly IUserAuthenticator userAuthenticator;
+   readonly IUserAuthenticationHandler userAuthenticationHandler;
    readonly ITokenGenerator tokenGenerator;
 
-   public UserAuthenticatorService(IUserAuthenticator userAuthenticator, ITokenGenerator tokenGenerator)
+   public UserAuthenticationService(IUserAuthenticationHandler userAuthenticationHandler, ITokenGenerator tokenGenerator)
    {
-      this.userAuthenticator = userAuthenticator;
+      this.userAuthenticationHandler = userAuthenticationHandler;
       this.tokenGenerator = tokenGenerator;
    }
 
    public async Task<AuthToken> AuthenticateUser(AuthenticationRequest request)
    {
-      await userAuthenticator.AuthenticateUser(request).ConfigureAwait(false);
+      await userAuthenticationHandler.Handle(request).ConfigureAwait(false);
       string token = tokenGenerator.GenerateToken(request.Username, "standard");
       return new()
       {

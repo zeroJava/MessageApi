@@ -1,25 +1,24 @@
 ﻿using MessageApi.Application;
-using MessageApi.Domain;
-using MessageApi.Infrastructure;
 
 namespace MessageApi;
 
+public interface IAuthenticationControllerBuilder
+{
+   IAuthenticationControllerBuilder AddTokenGenerator(ITokenGenerator tokenGenerator);
+   IAuthenticationControllerBuilder AddUserAuthenticationHandler(IUserAuthenticationHandler authenticationHandler);
+   IAuthenticationControllerBuilder AddUserAuthenticationService(IUserAuthenticationServiceUseCase authenticationService);
+   AuthenticationControllerOption Build();
+}
+
 public class AuthenticationControllerBuilder : IAuthenticationControllerBuilder
 {
-   readonly string defaultDbOption;
-
-   AuthenticationFieldValidatorBase? authenticationFieldValidator;
-   IUserRepository? userRepository;
+   IUserAuthenticationHandler? authenticationHandler;
    ITokenGenerator? tokenGenerator;
+   IUserAuthenticationServiceUseCase? authenticationService;
 
-   public AuthenticationControllerBuilder(string defaultDbOption)
+   public IAuthenticationControllerBuilder AddUserAuthenticationHandler(IUserAuthenticationHandler authenticationHandler)
    {
-      this.defaultDbOption = defaultDbOption;
-   }
-
-   public IAuthenticationControllerBuilder AddAuthenticationFieldValidator(AuthenticationFieldValidatorBase authenticationFieldValidator)
-   {
-      this.authenticationFieldValidator = authenticationFieldValidator;
+      this.authenticationHandler = authenticationHandler;
       return this;
    }
 
@@ -29,22 +28,28 @@ public class AuthenticationControllerBuilder : IAuthenticationControllerBuilder
       return this;
    }
 
-   public IAuthenticationControllerBuilder AddUserRepository(IUserRepository userRepository)
+   public IAuthenticationControllerBuilder AddUserAuthenticationService(IUserAuthenticationServiceUseCase authenticationService)
    {
-      this.userRepository = userRepository;
+      this.authenticationService = authenticationService;
       return this;
    }
 
    public AuthenticationControllerOption Build()
    {
-      AuthenticationFieldValidatorBase authValidator = authenticationFieldValidator ?? new AuthenticationFieldValidator();
-      ITokenGenerator tokenGen = tokenGenerator ?? new SimpleJwtTokenGenerator();
-      IUserRepository userRepo = userRepository ?? UserRepoFactory.GetRepository(defaultDbOption);
+      if (authenticationService is null)
+      {
+         NullCheck.ErrorIfNull(authenticationHandler);
+         NullCheck.ErrorIfNull(tokenGenerator);
+         authenticationService = new UserAuthenticationService(authenticationHandler, tokenGenerator);
+      }
       return new()
       {
-         AuthenticationFieldValidator = authValidator,
-         TokenGenerator = tokenGen,
-         UserRepository = userRepo,
+         UserAuthenticationService = authenticationService,
       };
    }
+}
+
+public sealed class AuthenticationControllerOption
+{
+   public required IUserAuthenticationServiceUseCase UserAuthenticationService { get; set; }
 }

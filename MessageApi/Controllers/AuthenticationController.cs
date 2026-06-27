@@ -11,7 +11,7 @@ public class AuthenticationController : ControllerBase
 {
    readonly IAuthenticationControllerBuilder authenticationControllerBuilder;
 
-   public AuthenticationController(AuthenticationControllerBuilder authenticationControllerBuilder)
+   public AuthenticationController(IAuthenticationControllerBuilder authenticationControllerBuilder)
    {
       this.authenticationControllerBuilder = authenticationControllerBuilder;
    }

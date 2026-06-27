@@ -53,11 +53,12 @@ public static class GlobalAppConfig
    {
       builder.Services.AddScoped<IAuthenticationControllerBuilder>(b =>
       {
-         IUserRepository userRepository = UserRepoFactory.GetRepository("sqlite");
-         ITokenGenerator tokenGen = new SimpleJwtTokenGenerator();
          AuthenticationFieldValidatorBase authValidator = new AuthenticationFieldValidator();
-         AuthenticationControllerBuilder controllerBuilder = new("sqlite");
-         controllerBuilder.AddTokenGenerator(tokenGen).AddAuthenticationFieldValidator(authValidator).AddUserRepository(userRepository);
+         IUserRepository userRepository = UserRepoFactory.GetRepository("sqlite");
+         IUserAuthenticationHandler userAuthenticationHandler = new UserAuthenticationHandler(userRepository, authValidator);
+         ITokenGenerator tokenGen = new SimpleJwtTokenGenerator();
+         AuthenticationControllerBuilder controllerBuilder = new();
+         controllerBuilder.AddTokenGenerator(tokenGen).AddUserAuthenticationHandler(userAuthenticationHandler);
          return controllerBuilder;
       });
    }

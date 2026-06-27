@@ -1,6 +1,6 @@
 ﻿namespace MessageApi.Application;
 
-public interface IUserAuthenticatorUseCase
+public interface IUserAuthenticationServiceUseCase
 {
    Task<AuthToken> AuthenticateUser(AuthenticationRequest request);
 }
