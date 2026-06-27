@@ -3,5 +3,5 @@
 public interface IUserServiceUseCase
 {
    Task<NewUserResponse> Create(NewUserData newuser);
-   Task<UserDto?> GetUser(AuthToken token, string username);
+   Task<UserDto> GetUser(AuthToken token, string username);
 }

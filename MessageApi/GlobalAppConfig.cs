@@ -13,19 +13,17 @@ public static class GlobalAppConfig
 {
    public static void InitialiseUserBuilder(WebApplicationBuilder builder)
    {
-      builder.Services.AddScoped<IUserControllerRerieverBuilder>(b =>
+      builder.Services.AddScoped<IUserControllerBuilder>(b =>
       {
          IUserRepository userRepository = UserRepoFactory.GetRepository("sqlite");
-         UserControllerRetrieverBuilder controllerBuilder = new("sqlite");
-         controllerBuilder.AddUserRepository(userRepository).AddInputValidator(new InputValidator());
-         return controllerBuilder;
-      });
 
-      builder.Services.AddScoped<IUserControllerCreatorBuilder>(b =>
-      {
-         IUserRepository userRepository = UserRepoFactory.GetRepository("sqlite");
-         UserControllerCreatorBuilder controllerBuilder = new("sqlite");
-         controllerBuilder.AddUserRepository(userRepository);
+         ICreateUserHandler createUserHandler = new CreateUserHandler(userRepository);
+         IRetrieveUserHandler retrieveUserHandler = new RetrieveUserHandler(userRepository);
+         UserFieldValidatorBase userFieldValidator = new UserFieldValidator(userRepository);
+
+         UserControllerBuilder controllerBuilder = new();
+         controllerBuilder.AddCreateUserHandler(createUserHandler).AddIRetrieveUserHandler(retrieveUserHandler)
+            .AddUserFieldValidator(userFieldValidator).AddInputValidator(new InputValidator());
          return controllerBuilder;
       });
    }

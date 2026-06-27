@@ -9,23 +9,21 @@ namespace MessageApi.Controllers;
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
-   readonly IUserControllerRerieverBuilder userControllerRetrieverBuilder;
-   readonly IUserControllerCreatorBuilder userControllerCreatorBuilder;
+   readonly IUserControllerBuilder userControllerBuilder;
 
-   public UserController(IUserControllerRerieverBuilder userControllerRetrieverBuilder, IUserControllerCreatorBuilder userControllerCreatorBuilder)
+   public UserController(IUserControllerBuilder userControllerCreatorBuilder)
    {
-      this.userControllerRetrieverBuilder = userControllerRetrieverBuilder;
-      this.userControllerCreatorBuilder = userControllerCreatorBuilder;
+      this.userControllerBuilder = userControllerCreatorBuilder;
    }
 
    [HttpPost]
    [Route("NewUser")]
-   public async Task<ActionResult<UserDto>> NewUser(NewUserData newuser)
+   public async Task<ActionResult<NewUserResponse>> NewUser(NewUserData newuser)
    {
       try
       {
-         UserDto userDto = await UserControllerLogic.CreateUser(newuser, userControllerCreatorBuilder).ConfigureAwait(false);
-         return Ok(userDto);
+         NewUserResponse response = await UserControllerLogic.CreateUser(newuser, userControllerBuilder).ConfigureAwait(false);
+         return Ok(response);
       }
       catch (Exception ex)
       {
@@ -41,7 +39,7 @@ public class UserController : ControllerBase
    {
       try
       {
-         UserDto userDto = await UserControllerLogic.GetUser(userRequest, userControllerRetrieverBuilder).ConfigureAwait(false);
+         UserDto userDto = await UserControllerLogic.GetUser(userRequest, userControllerBuilder).ConfigureAwait(false);
          return Ok(userDto);
       }
       catch (Exception ex)

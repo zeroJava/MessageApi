@@ -49,20 +49,16 @@ public class MessageControllerBuilder : IMessageControllerBuilder
 
    public MessageControllerOption Build()
    {
-      ApplicationException error(string name)
-      {
-         return new ApplicationException($"Property: {name} was not initialised");
-      }
       if (messageService is null)
       {
-         ICreateMessageHandler createMessageHndlr = createMessageHandler ?? throw error(nameof(createMessageHandler));
-         IGetConversationHandler conversationHndlr = conversationHandler ?? throw error(nameof(conversationHandler));
-         IGetMessagesToUserHandler messagesToUserHndlr = messagesToUserHandler ?? throw error(nameof(messagesToUserHandler));
-         messageService = new MessageService(createMessageHndlr, conversationHndlr, messagesToUserHndlr);
+         NullCheck.ErrorIfNull(createMessageHandler);
+         NullCheck.ErrorIfNull(conversationHandler);
+         NullCheck.ErrorIfNull(messagesToUserHandler);
+         messageService = new MessageService(createMessageHandler, conversationHandler, messagesToUserHandler);
       }
       return new MessageControllerOption()
       {
-         MessageService = messageService ?? throw error(nameof(messageService)),
+         MessageService = messageService,
       };
    }
 }

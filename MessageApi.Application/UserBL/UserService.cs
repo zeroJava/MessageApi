@@ -24,9 +24,11 @@ public class UserService : IUserServiceUseCase
       return await createUserHandler.Handle(newuser).ConfigureAwait(false);
    }
 
-   public async Task<UserDto?> GetUser(AuthToken token, string username)
+   public async Task<UserDto> GetUser(AuthToken token, string username)
    {
       await inputValidator.ValidateAsync(username).ConfigureAwait(false);
-      return await retrieveUserHandler.Handle(username);
+      UserDto? userDto = await retrieveUserHandler.Handle(username);
+      return userDto is null ?
+         throw new ApplicationException($"Could not find user matching {username}") : userDto;
    }
 }
