@@ -21,26 +21,26 @@ public class MessageDispatchRepository : IMessageDispatchRepository
       return dbContext.MessageDispatches.SingleOrDefault(m => m.Id == dispatchId);
    }
 
-   public List<MessageDispatch> GetDispatchesEmail(string email)
+   public IEnumerable<MessageDispatch> GetDispatchesEmail(string email)
    {
       using MessageDbContext dbContext = new();
       return dbContext.MessageDispatches.Where(m => m.EmailAddress == email).ToList();
    }
 
-   public List<MessageDispatch> GetDispatchesMessageId(long messageId)
+   public IEnumerable<MessageDispatch> GetDispatchesMessageId(long messageId)
    {
       using MessageDbContext dbContext = new();
       return dbContext.MessageDispatches.Where(m => m.MessageId == messageId).ToList();
    }
 
-   public List<MessageDispatch> GetDispatchesNotReceived(string email)
+   public IEnumerable<MessageDispatch> GetDispatchesNotReceived(string email)
    {
       using MessageDbContext dbContext = new();
       return dbContext.MessageDispatches.Where(m => m.EmailAddress == email)
          .Where(m => m.MessageReceived != true).ToList();
    }
 
-   public List<MessageDispatch> GetDispatchesSenderReceiver(string senderEmailAddress, string receiverEmailAddress, long messageIdThreshold, int numberOfMessages)
+   public IEnumerable<MessageDispatch> GetDispatchesSenderReceiver(string senderEmailAddress, string receiverEmailAddress, long messageIdThreshold, int numberOfMessages)
    {
       return Enumerable.Empty<MessageDispatch>().ToList();
    }

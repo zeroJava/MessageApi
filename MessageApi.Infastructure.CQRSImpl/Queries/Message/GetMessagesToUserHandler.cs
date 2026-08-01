@@ -18,15 +18,15 @@ public class GetMessagesToUserHandler : IGetMessagesToUserHandler
       this.messageDispatchRepository = messageDispatchRepository;
    }
 
-   public async Task<List<MessageInfo>> Handle(MessagesToUserRequest request)
+   public async Task<IEnumerable<MessageInfo>> Handle(MessagesToUserRequest request)
    {
       User user = UserHelper.GetUser(userRepository, request.Username);
       return GetMessagesSent(user.Id, request.ReceiverEmailAddress);
    }
 
-   List<MessageInfo> GetMessagesSent(long userId, string receiverEmail)
+   IEnumerable<MessageInfo> GetMessagesSent(long userId, string receiverEmail)
    {
-      List<MessageDispatch> dispatches = messageDispatchRepository.GetDispatchesNotReceived(receiverEmail);
+      IEnumerable<MessageDispatch> dispatches = messageDispatchRepository.GetDispatchesNotReceived(receiverEmail);
       IEnumerable<Message> messages = MessageHelper.GetMessages(messageRepository, dispatches);
       foreach (MessageDispatch dispatch in dispatches)
       {
@@ -41,7 +41,7 @@ public class GetMessagesToUserHandler : IGetMessagesToUserHandler
 
    class Helper
    {
-      public List<MessageInfo> GetDispatchInfo(List<MessageDispatch> dispatches, long userId,
+      public IEnumerable<MessageInfo> GetDispatchInfo(IEnumerable<MessageDispatch> dispatches, long userId,
          MessageInfoMapper mapper)
       {
          List<MessageInfo> postedMessageInfo = new();

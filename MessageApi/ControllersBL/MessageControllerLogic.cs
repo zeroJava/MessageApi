@@ -11,14 +11,14 @@ public static class MessageControllerLogic
       return await messageService.Create(request).ConfigureAwait(false);
    }
 
-   public static async Task<List<MessageInfo>> GetMessagesSentToUser(RetrieveMessageRequest request, IMessageControllerBuilder builder)
+   public static async Task<IEnumerable<MessageInfo>> GetMessagesSentToUser(RetrieveMessageRequest request, IMessageControllerBuilder builder)
    {
       MessageControllerOption option = builder.Build();
       IMessageServiceUseCase messageService = option.MessageService;
       return await messageService.GetMessagesSentToUser(request).ConfigureAwait(false);
    }
 
-   public static async Task<List<MessageInfo>> GetConversation(RetrieveMessageRequest request, IMessageControllerBuilder builder)
+   public static async Task<IEnumerable<MessageInfo>> GetConversation(RetrieveMessageRequest request, IMessageControllerBuilder builder)
    {
       MessageControllerOption option = builder.Build();
       IMessageServiceUseCase messageService = option.MessageService;

@@ -18,7 +18,7 @@ public class AuthenticationController : ControllerBase
 
    [HttpPost]
    [Route("AuthenticateUser")]
-   public async Task<ActionResult<UserDto>> AuthenticateUser(AuthenticationRequest request)
+   public async Task<ActionResult<AuthToken>> AuthenticateUser(AuthenticationRequest request)
    {
       try
       {

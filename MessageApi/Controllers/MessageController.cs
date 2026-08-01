@@ -37,11 +37,11 @@ public class MessageController : ControllerBase
    [Authorize]
    [HttpPost]
    [Route("Conversation")]
-   public async Task<ActionResult<List<MessageInfo>>> GetConversation(RetrieveMessageRequest request)
+   public async Task<ActionResult<IEnumerable<MessageInfo>>> GetConversation(RetrieveMessageRequest request)
    {
       try
       {
-         List<MessageInfo> messages = await MessageControllerLogic.GetConversation(request, messageControllerBuilder).ConfigureAwait(false);
+         IEnumerable<MessageInfo> messages = await MessageControllerLogic.GetConversation(request, messageControllerBuilder).ConfigureAwait(false);
          return Ok(messages);
       }
       catch (Exception ex)
@@ -54,11 +54,11 @@ public class MessageController : ControllerBase
    [Authorize]
    [HttpPost]
    [Route("MessagesSentToUser")]
-   public async Task<ActionResult<List<MessageInfo>>> GetMessagesSentToUser(RetrieveMessageRequest request)
+   public async Task<ActionResult<IEnumerable<MessageInfo>>> GetMessagesSentToUser(RetrieveMessageRequest request)
    {
       try
       {
-         List<MessageInfo> messages = await MessageControllerLogic.GetMessagesSentToUser(request, messageControllerBuilder).ConfigureAwait(false);
+         IEnumerable<MessageInfo> messages = await MessageControllerLogic.GetMessagesSentToUser(request, messageControllerBuilder).ConfigureAwait(false);
          return Ok(messages);
       }
       catch (Exception ex)

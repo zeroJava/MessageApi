@@ -16,26 +16,26 @@ public class GetConversationHandler : IGetConversationHandler
       this.messageDispatchRepository = messageDispatchRepository;
    }
 
-   public async Task<List<MessageInfo>> Handle(ConversationRequest request)
+   public async Task<IEnumerable<MessageInfo>> Handle(ConversationRequest request)
    {
       User user = UserHelper.GetUser(userRepository, request.Username);
-      List<MessageInfo> postedMessages = GetDispathces(request, user);
+      IEnumerable<MessageInfo> postedMessages = GetDispathces(request, user);
       return postedMessages;
    }
 
-   List<MessageInfo> GetDispathces(ConversationRequest request, User user)
+   IEnumerable<MessageInfo> GetDispathces(ConversationRequest request, User user)
    {
-      List<MessageDispatch> dispatches = messageDispatchRepository.GetDispatchesSenderReceiver(request.SenderEmailAddress,
+      IEnumerable<MessageDispatch> dispatches = messageDispatchRepository.GetDispatchesSenderReceiver(request.SenderEmailAddress,
          request.ReceiverEmailAddress,
          request.MessageIdThreshold,
          request.NumberOfMessages);
-      List<MessageInfo> dispatchInfos = helper.GetDispatchInfo(dispatches, user.Id, mapper);
+      IEnumerable<MessageInfo> dispatchInfos = helper.GetDispatchInfo(dispatches, user.Id, mapper);
       return dispatchInfos;
    }
 
    class Helper
    {
-      public List<MessageInfo> GetDispatchInfo(List<MessageDispatch> dispatches, long userId,
+      public IEnumerable<MessageInfo> GetDispatchInfo(IEnumerable<MessageDispatch> dispatches, long userId,
          MessageInfoMapper mapper)
       {
          List<MessageInfo> postedMessageInfo = new();

@@ -2,7 +2,7 @@
 
 public interface IGetMessagesToUserHandler
 {
-   Task<List<MessageInfo>> Handle(MessagesToUserRequest request);
+   Task<IEnumerable<MessageInfo>> Handle(MessagesToUserRequest request);
 }
 
 public record MessagesToUserRequest

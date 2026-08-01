@@ -2,7 +2,7 @@
 
 public interface IGetConversationHandler
 {
-   Task<List<MessageInfo>> Handle(ConversationRequest conversationRequest);
+   Task<IEnumerable<MessageInfo>> Handle(ConversationRequest conversationRequest);
 }
 
 public record ConversationRequest

@@ -7,6 +7,6 @@ public interface IMessageRepository : IDisposable
    void DeleteMessage(Message message);
 
    Message? GetMessage(long messageId);
-   List<Message> GetMessagesMatchingText(string text);
-   List<Message> GetMessages(IEnumerable<long> messageids);
+   IEnumerable<Message> GetMessagesMatchingText(string text);
+   IEnumerable<Message> GetMessages(IEnumerable<long> messageids);
 }

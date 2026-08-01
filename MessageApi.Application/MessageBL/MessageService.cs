@@ -27,7 +27,7 @@ public class MessageService : IMessageServiceUseCase
       return await createMessageHandler.Handle(createRequest);
    }
 
-   public async Task<List<MessageInfo>> GetConversation(RetrieveMessageRequest messageRequest)
+   public async Task<IEnumerable<MessageInfo>> GetConversation(RetrieveMessageRequest messageRequest)
    {
       // Token validation here
       ConversationRequest conversationRequest = new()
@@ -41,7 +41,7 @@ public class MessageService : IMessageServiceUseCase
       return await getConversationHandler.Handle(conversationRequest);
    }
 
-   public async Task<List<MessageInfo>> GetMessagesSentToUser(RetrieveMessageRequest messageRequest)
+   public async Task<IEnumerable<MessageInfo>> GetMessagesSentToUser(RetrieveMessageRequest messageRequest)
    {
       // Token validation here
       MessagesToUserRequest request = new()

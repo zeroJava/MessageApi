@@ -7,10 +7,10 @@ public interface IMessageDispatchRepository : IDisposable
    void DeleteDispatch(MessageDispatch dispatch);
 
    MessageDispatch? GetDispatch(long dispatchId);
-   List<MessageDispatch> GetDispatchesMessageId(long messageId);
-   List<MessageDispatch> GetDispatchesEmail(string email);
-   List<MessageDispatch> GetDispatchesNotReceived(string email);
-   List<MessageDispatch> GetDispatchesSenderReceiver(string senderEmailAddress, string receiverEmailAddress,
+   IEnumerable<MessageDispatch> GetDispatchesMessageId(long messageId);
+   IEnumerable<MessageDispatch> GetDispatchesEmail(string email);
+   IEnumerable<MessageDispatch> GetDispatchesNotReceived(string email);
+   IEnumerable<MessageDispatch> GetDispatchesSenderReceiver(string senderEmailAddress, string receiverEmailAddress,
        long messageIdThreshold,
        int numberOfMessages);
 }

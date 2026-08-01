@@ -21,13 +21,13 @@ public class MessageRepository : IMessageRepository
       return dbContext.Messages.SingleOrDefault(m => m.Id == messageId);
    }
 
-   public List<Message> GetMessages(IEnumerable<long> messageids)
+   public IEnumerable<Message> GetMessages(IEnumerable<long> messageids)
    {
       using MessageDbContext dbContext = new();
       return dbContext.Messages.Where(m => messageids.Any(i => i == m.Id)).ToList();
    }
 
-   public List<Message> GetMessagesMatchingText(string text)
+   public IEnumerable<Message> GetMessagesMatchingText(string text)
    {
       using MessageDbContext dbContext = new();
       return dbContext.Messages.Where(m => m.MessageText == text).ToList();
